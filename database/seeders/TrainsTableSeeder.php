@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Train;
+use Illuminate\Support\Str;
 
 class TrainsTableSeeder extends Seeder
 {
@@ -16,8 +17,8 @@ class TrainsTableSeeder extends Seeder
         //qui inserisco la logica per popolare la tabella
         $data = [
             [
-                "company" => 'Trenitalia1',
-                "slug" => 'Trenitalia1',
+                "company" => 'Trenitalia',
+                "slug" => 'Trenitalia',
                 "departure_station" => 'roma',
                 "arrival_station" => 'napoli',
                 "departure_time" => '2024-05-19 10:00:00',
@@ -28,8 +29,8 @@ class TrainsTableSeeder extends Seeder
                 "cancelled" => false,
             ],
             [
-                "company" => 'Trenitalia2',
-                "slug" => 'Trenitalia2',
+                "company" => 'Trenitalia',
+                "slug" => 'Trenitalia',
                 "departure_station" => 'roma',
                 "arrival_station" => 'napoli',
                 "departure_time" => '2024-05-19 11:00:00',
@@ -40,8 +41,8 @@ class TrainsTableSeeder extends Seeder
                 "cancelled" => false,
             ],
             [
-                "company" => 'Trenitalia3',
-                "slug" => 'Trenitalia3',
+                "company" => 'Trenitalia',
+                "slug" => 'Trenitalia',
                 "departure_station" => 'firenze',
                 "arrival_station" => 'bologna',
                 "departure_time" => '2024-05-19 15:00:00',
@@ -52,8 +53,8 @@ class TrainsTableSeeder extends Seeder
                 "cancelled" => false,
             ],
             [
-                "company" => 'Trenitalia4',
-                "slug" => 'Trenitalia4',
+                "company" => 'Trenitalia',
+                "slug" => 'Trenitalia',
                 "departure_station" => 'milano',
                 "arrival_station" => 'roma',
                 "departure_time" => '2024-05-19 10:00:00',
@@ -69,7 +70,8 @@ class TrainsTableSeeder extends Seeder
         foreach ($data as $item) {
             $new_train = new Train();
             $new_train->company = $item['company'];
-            $new_train->slug = $item['slug'];
+            // $new_train->slug = Str::slug($item['company'], '-');
+            $new_train->slug = $this->generateSlug($new_train->company);
             $new_train->departure_station = $item['departure_station'];
             $new_train->arrival_station = $item['arrival_station'];
             $new_train->departure_time = $item['departure_time'];
@@ -101,5 +103,36 @@ class TrainsTableSeeder extends Seeder
 
 
         // dump($new_train);
+    }
+
+    private function generateSlug($string)
+    {
+        /*
+            1. ricevo la stringa da "sluggare"
+            2. genero lo slug
+            3. faccio una query per vedere se lo slug è già presente nel db
+            4. se non è presente restituisco lo slug
+            5. se è presente ne genero un altro con un valore incrementale e ad ogni generazione verifico che non sia prente
+            6. una volta trovato uno slug non presento le restituisco
+        */
+
+        //2
+        $slug = Str::slug($string, '-');
+        $original_slug = $slug;
+
+        //3
+        $exixts = Train::where('slug', $slug)->first();
+        $c = 1;
+
+        while ($exixts) {
+            $slug = $original_slug . '-' . $c;
+            $exixts = Train::where('slug', $slug)->first();
+            $c++;
+        }
+
+        // 5.
+
+
+        return $slug;
     }
 }

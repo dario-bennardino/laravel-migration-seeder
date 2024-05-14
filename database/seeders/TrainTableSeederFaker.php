@@ -32,7 +32,8 @@ class TrainTableSeederFaker extends Seeder
             $new_train->wagons_number = $faker->numberBetween(1, 50);
             $new_train->on_time = $faker->boolean();
             $new_train->cancelled = $faker->boolean();
-            dump($new_train);
+            // dump($new_train);
+            $new_train->save();
         }
         //
     }

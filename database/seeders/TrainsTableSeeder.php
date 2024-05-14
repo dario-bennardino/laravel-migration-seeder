@@ -18,6 +18,20 @@ class TrainsTableSeeder extends Seeder
         //creo una nuova istanza di train
         $new_train = new Train();
         $new_train->company = 'Trenitalia';
-        dump($new_train);
+        $new_train->slug = 'Trenitalia';
+        $new_train->departure_station = 'roma';
+        $new_train->arrival_station = 'napoli';
+        $new_train->departure_time = '2024-05-19 10:00:00';
+        $new_train->arrival_time = '2024-05-19 11:00:00';
+        $new_train->train_code = 'AB121';
+        $new_train->wagons_number = 3;
+        $new_train->on_time = true;
+        $new_train->cancelled = false;
+
+        //effettuo l'insert nell'db
+        $new_train->save();
+
+
+        // dump($new_train);
     }
 }

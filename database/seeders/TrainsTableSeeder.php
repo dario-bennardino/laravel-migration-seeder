@@ -13,6 +13,10 @@ class TrainsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        //qui inserisco la logica per popolare la tabella
+        dump('run TrainsTableSeeder !!!!');
+        //creo una nuova istanza di train
+        $new_train = new Train();
+        dump($new_train);
     }
 }
